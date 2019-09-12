@@ -18,7 +18,7 @@ ICONPATH = os.path.join(ADDONPATH, "icons", "button.png")
 CONFIG = mw.addonManager.getConfig(__name__)
 
 def clean_text(text): #Verificada
-    text = re.sub(";|<i>|</i>|<b>|</b>|<u>|</u>|<br>|<div>|</div>|<p>|</p>|\n", "", text)
+    text = re.sub("^'|^\"|'$|\"$|\‘|\’|;|<i>|</i>|<b>|</b>|<u>|</u>|<br>|<div>|</div>|<p>|</p>|\n", "", text)
     text = re.sub("&nbsp", " ", text)
     return text
 
