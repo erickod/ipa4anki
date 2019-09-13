@@ -100,7 +100,7 @@ def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
                "hh": "h", "ih": "ɪ", "jh": "ʤ", "ng": "ŋ",  "ow": "oʊ", "oy": "ɔɪ",
                "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "zh": "ʒ", "iy": "i", "y": "j"}"""
 
-    symbols = {"a": "ɑ", "ey": "eɪ", "aa": "ɑ", "ae": "æ", "ah": "ʌ", "ao": "ɔ",
+    symbols = {"a": "ɑ", "ey": "eɪ", "aa": "ɑ", "ae": "æ", "ah": "ə", "ao": "ɔ",
                "aw": "aʊ", "ay": "aɪ", "ax": "ə", "ch": "tʃ", "dh": "ð", "eh": "ɛ", "er": "ɜr",
                "hh": "h", "ih": "ɪ", "ix":"ɨ", "jh": "dʒ", "ng": "ŋ", "nx": "ŋ", "ow": "oʊ", "oy": "ɔɪ",
                "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "ux": "ʉ", "zh": "ʒ", "iy": "i", "y": "j"}
