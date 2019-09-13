@@ -34,6 +34,7 @@ def pronuciation_changes_by_vowel(word: str) -> str:
 def general_subs(word: str) -> str:
     variation_dict = {
         "hwʌt": "wʌt", "hˈwɛðɜr":"ˈwɛðɜr", "eɪ":"ə",
+        "hwət":"wʌt",
     }
     try:
         return variation_dict[word.lower()]
