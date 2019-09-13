@@ -8,7 +8,7 @@ from aqt.utils import showInfo
 from aqt.editor import Editor
 from aqt import mw
 
-from .TranscriptionServices import eng_to_ipa as ipa 
+from .TranscriptionServices import word_rules as ipa 
 
 #from . import parse_ipa 
 
@@ -26,7 +26,7 @@ def paste_ipa(editor): #Verificada
 
     note = editor.note
     cleaned_text = clean_text(str(note[CONFIG['WORD_FIELD']]))
-    note[CONFIG['IPA_FIELD']] = ipa.convert(cleaned_text)
+    note[CONFIG['IPA_FIELD']] = ipa.convert_to_ipa2(cleaned_text)
     editor.loadNote()
     editor.web.setFocus()
     editor.web.eval("focusField(%d);" % editor.currentField)
