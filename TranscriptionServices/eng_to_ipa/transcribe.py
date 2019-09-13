@@ -95,10 +95,15 @@ def get_cmu(tokens_in, db_type="sql"):
 
 def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
     """converts the CMU word lists into IPA transcriptions"""
-    symbols = {"a": "ə", "ey": "e", "aa": "ɑ", "ae": "æ", "ah": "ə", "ao": "ɔ",
+    """symbols = {"a": "ə", "ey": "e", "aa": "ɑ", "ae": "æ", "ah": "ə", "ao": "ɔ",
                "aw": "aʊ", "ay": "aɪ", "ch": "ʧ", "dh": "ð", "eh": "ɛ", "er": "ər",
                "hh": "h", "ih": "ɪ", "jh": "ʤ", "ng": "ŋ",  "ow": "oʊ", "oy": "ɔɪ",
-               "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "zh": "ʒ", "iy": "i", "y": "j"}
+               "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "zh": "ʒ", "iy": "i", "y": "j"}"""
+
+    symbols = {"a": "ɑ", "ey": "eɪ", "aa": "ɑ", "ae": "æ", "ah": "ʌ", "ao": "ɔ",
+               "aw": "aʊ", "ay": "aɪ", "ax": "ə", "ch": "tʃ", "dh": "ð", "eh": "ɛ", "er": "ɜr",
+               "hh": "h", "ih": "ɪ", "ix":"ɨ", "jh": "dʒ", "ng": "ŋ", "nx": "ŋ", "ow": "oʊ", "oy": "ɔɪ",
+               "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "ux": "ʉ", "zh": "ʒ", "iy": "i", "y": "j"}
     ipa_list = []  # the final list of IPA tokens to be returned
     for word_list in cmu_list:
         ipa_word_list = []  # the word list for each word
@@ -145,7 +150,8 @@ def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
 
 def get_top(ipa_list):
     """Returns only the one result for a query. If multiple entries for words are found, only the first is used."""
-    return ' '.join([word_list[-1] for word_list in ipa_list])
+    #return ' '.join([word_list[-1] for word_list in ipa_list])
+    return ' '.join([word_list[0] for word_list in ipa_list])
 
 
 def get_all(ipa_list):
