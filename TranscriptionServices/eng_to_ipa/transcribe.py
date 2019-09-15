@@ -2,6 +2,7 @@
 import re
 from os.path import join, abspath, dirname
 from . import stress
+from . import rules
 from collections import defaultdict
 
 
@@ -97,13 +98,13 @@ def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
     """converts the CMU word lists into IPA transcriptions"""
     """symbols = {"a": "ə", "ey": "e", "aa": "ɑ", "ae": "æ", "ah": "ə", "ao": "ɔ",
                "aw": "aʊ", "ay": "aɪ", "ch": "ʧ", "dh": "ð", "eh": "ɛ", "er": "ər",
-               "hh": "h", "ih": "ɪ", "jh": "ʤ", "ng": "ŋ",  "ow": "oʊ", "oy": "ɔɪ",
+               "hh": "h", "ih": "ɪ", "jh": "dʒ", "ng": "ŋ",  "ow": "oʊ", "oy": "ɔɪ",
                "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "zh": "ʒ", "iy": "i", "y": "j"}"""
 
-    symbols = {"a": "ɑ", "ey": "eɪ", "aa": "ɑ", "ae": "æ", "ah": "ə", "ao": "ɔ",
-               "aw": "aʊ", "ay": "aɪ", "ax": "ə", "ch": "tʃ", "dh": "ð", "eh": "ɛ", "er": "ɜr",
-               "hh": "h", "ih": "ɪ", "ix":"ɨ", "jh": "dʒ", "ng": "ŋ", "nx": "ŋ", "ow": "oʊ", "oy": "ɔɪ",
-               "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "ux": "ʉ", "zh": "ʒ", "iy": "i", "y": "j"}
+    symbols = {"a": "ə", "aa": "ɑ", "ah": "ʌ", "ao": "ɔ", "aw": "aʊ", "ay": "aɪ", "ch": "ʧ", "dh": "ð",
+               "eh": "ɛ", "er": "ər", "ey": "eɪ", "hh": "h", "ih": "ɪ", "iy": "i", "jh": "dʒ", "ng": "ŋ",
+               "ow": "oʊ", "oy": "ɔɪ", "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "y": "j", "zh": "ʒ"}
+
     ipa_list = []  # the final list of IPA tokens to be returned
     for word_list in cmu_list:
         ipa_word_list = []  # the word list for each word
@@ -145,6 +146,7 @@ def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
                     ipa_form = ipa_form.replace(sym[0], sym[1])
             ipa_word_list.append(ipa_form)
         ipa_list.append(sorted(list(set(ipa_word_list))))
+    #print("function cmu_to_ipa: ", ipa_list)
     return ipa_list
 
 
@@ -152,6 +154,14 @@ def get_top(ipa_list):
     """Returns only the one result for a query. If multiple entries for words are found, only the first is used."""
     #return ' '.join([word_list[-1] for word_list in ipa_list])
     return ' '.join([word_list[0] for word_list in ipa_list])
+
+def preferred_word_transcriptions(word: str) -> str:
+    preferred_list = ['bɑm']
+    ipa_word_list = ipa_list(word.lower())[0]
+    for ipa_word in ipa_word_list:
+        if ipa_word in preferred_list and len(ipa_word_list) > 1:
+            return ipa_word
+    return ipa_word_list[0]
 
 
 def get_all(ipa_list):
@@ -198,7 +208,7 @@ def isin_cmu(word, db_type="sql"):
     return len(as_set) == len(set(word))
 
 
-def convert(text, retrieve_all=False, keep_punct=True, stress_marks='both', mode="sql"):
+def convert(text, retrieve_all=False, keep_punct=True, stress_marks='both', mode="sql", use_rules=True):
     """takes either a string or list of English words and converts them to IPA"""
     ipa = ipa_list(
                    words_in=text,
@@ -207,6 +217,8 @@ def convert(text, retrieve_all=False, keep_punct=True, stress_marks='both', mode
                    db_type=mode)
     if retrieve_all:
         return get_all(ipa)
+    elif use_rules:
+        ipa = rules.transcription_changes(text, ipa,)
     return get_top(ipa)
 
 
