@@ -1,10 +1,38 @@
-from .eng_to_ipa import rhymes
-from .eng_to_ipa import stress
-from .eng_to_ipa import syllables
-from .eng_to_ipa import transcribe
-from .eng_to_ipa import transcriber
-from .eng_to_ipa import rules
-from . import UpoDNIPAService
+# -*- coding: utf-8 -*-
 
-__all__ = ['rhymes', 'stress', 'syllables', 'transcribe', 
-'transcriber', 'UpoDNIPAService', 'rules']
+import os
+import re
+
+from anki.hooks import addHook, wrap
+from aqt.utils import showInfo
+from aqt.editor import Editor
+from aqt import mw
+
+from .TranscriptionServices.eng_to_ipa import transcribe
+
+ADDONPATH = os.path.dirname(__file__)
+ICONPATH = os.path.join(ADDONPATH, "icons", "button.png")
+CONFIG = mw.addonManager.getConfig(__name__)
+
+def clean_text(text): #Verificada
+    text = re.sub("^'|^\"|'$|\"$|\‘|\’|;|<i>|</i>|<b>|</b>|<u>|</u>|<br>|<div>|</div>|<p>|</p>|\n", "", text)
+    text = re.sub("&nbsp", " ", text)
+    return text
+
+def paste_ipa(editor): #Verificada
+
+    note = editor.note
+    cleaned_text = clean_text(str(note[CONFIG['WORD_FIELD']]))
+    note[CONFIG['IPA_FIELD']] = transcribe.convert(cleaned_text)
+    editor.loadNote()
+    editor.web.setFocus()
+    editor.web.eval("focusField(%d);" % editor.currentField)
+    
+def on_setup_buttons(buttons, editor):
+    button = editor.addButton(ICONPATH, "IPA", paste_ipa)
+    buttons.append(button)
+
+    return buttons
+
+
+addHook("setupEditorButtons", on_setup_buttons)

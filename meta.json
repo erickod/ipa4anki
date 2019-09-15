@@ -1,1 +1,1 @@
-{"name": "IPA for Anki", "mod": 1565995128, "config": {"IPA_FIELD": "", "WORD_FIELD": "", "deckdefaultlang": {}, "defaultlangperdeck": 1, "lang": "eng"}}
+{"name": "toPhonetics for Anki", "mod": 1565995128, "config": {"IPA_FIELD": "Pronunciation", "WORD_FIELD": "Expression", "deckdefaultlang": {}, "defaultlangperdeck": 1, "lang": "eng"}}

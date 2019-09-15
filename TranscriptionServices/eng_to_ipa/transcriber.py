@@ -1,5 +1,3 @@
-# 2/19 - not yet implemented
-
 import re
 from os.path import join, abspath, dirname
 from . import stress
