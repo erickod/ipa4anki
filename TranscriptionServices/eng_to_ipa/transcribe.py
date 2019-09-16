@@ -101,7 +101,7 @@ def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
                "hh": "h", "ih": "ɪ", "jh": "dʒ", "ng": "ŋ",  "ow": "oʊ", "oy": "ɔɪ",
                "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "zh": "ʒ", "iy": "i", "y": "j"}"""
 
-    symbols = {"a": "ə", "aa": "ɑ", "ah": "ʌ", "ao": "ɔ", "aw": "aʊ", "ay": "aɪ", "ch": "ʧ", "dh": "ð",
+    symbols = {"a": "ə", "aa": "ɑ", "ae": "æ", "ah": "ʌ", "ao": "ɔ", "aw": "aʊ", "ay": "aɪ", "ch": "ʧ", "dh": "ð",
                "eh": "ɛ", "er": "ər", "ey": "eɪ", "hh": "h", "ih": "ɪ", "iy": "i", "jh": "dʒ", "ng": "ŋ",
                "ow": "oʊ", "oy": "ɔɪ", "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "y": "j", "zh": "ʒ"}
 
@@ -218,7 +218,7 @@ def convert(text, retrieve_all=False, keep_punct=True, stress_marks='both', mode
     if retrieve_all:
         return get_all(ipa)
     elif use_rules:
-        ipa = rules.transcription_changes(text, ipa,)
+        ipa = rules.make_transcription_changes(ipa)
     return get_top(ipa)
 
 
