@@ -30,8 +30,12 @@ def changes_when_it_is_just_one_word(ipa_list: list) -> 'ipa_list':
     symbols_sub = {
         "eɪ":"ʌ"
     }
-    if len(ipa_list) > 1 and len(ipa_list[0]) > 1 and ipa_list[0][0] in symbols_sub.keys():
-        ipa_list[0][0] = symbols_sub[ipa_list[0][0]]
+
+    for ipa_el in ipa_list:
+        ipa_el_index = ipa_list.index(ipa_el)
+        if len(ipa_el) > 1 and ipa_el[0] in symbols_sub.keys() and len(ipa_list) > 1:
+            ipa_list[ipa_el_index][0] = symbols_sub[ipa_el[0]]
+
     return ipa_list
 
 
