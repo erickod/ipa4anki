@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import urllib
+import requests
 import bs4
 
 
@@ -10,7 +10,7 @@ class GenericTranscriptionService:
         self.name = name;
         self.url = url
 
-    def translate_to_ipa(self, ) -> 'any':
+    def translate(self, ) -> 'any':
         raise NotImplemented
 
     def __str__(self):
@@ -23,23 +23,15 @@ class GenericTranscriptionService:
 class IpaTranscriptionService(GenericTranscriptionService):
     def __init__(self, name, url):
         super().__init__(name, url);
-        self.work_with_forms = False
         self.headers = None
+        self.translated_text = None
 
-    def set_form_fields(self, text_to_translate_to_ipa: str) -> None:
-        self.works_with_forms = True
 
     def set_headers(self, headers: dict) -> dict:
         return headers
 
-    def fetch_target_page(self, url: str) -> bs4.BeautifulSoup:
-        if not self.headers:
-            req = urllib.request.Request(url, data=self.form_fields)
-        else:
-            req = urllib.request.Request(url=self.url, fields=self.form_fields, header=self.header)
-        page_result = urllib.request.urlopen(req).read()
-        soup = bs4.BeautifulSoup(page_result, 'html.parser')
-        return soup
+    def fetch_target_page(self, url: str, method='get') -> bs4.BeautifulSoup:
+        raise NotImplemented
 
 
 

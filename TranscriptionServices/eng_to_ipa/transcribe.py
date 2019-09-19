@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 import re
+from os import stat
 from os.path import join, abspath, dirname
 from . import stress
 from . import rules
 from collections import defaultdict
+import requests
 
+from bs4 import BeautifulSoup, Comment
+
+from ..CMULexiconTool import CMULexiconTool
 
 def mode_type(mode_in):
     """In the case of "sql", this will return an sqlite cursor.
@@ -86,12 +91,20 @@ def get_cmu(tokens_in, db_type="sql"):
     result = fetch_words(tokens_in, db_type)
     ordered = []
     for word in tokens_in:
+        #
         this_word = [[i[1] for i in result if i[0] == word]][0]
         if this_word:
             ordered.append(this_word[0])
         else:
-            ordered.append(["__IGNORE__" + word])
+            #append em ordered uma lista contendo o cmu
+            temp_list = [el.lower() for el in get_cmu_online(word)[0]]
+            if temp_list:
+                ordered.append(temp_list)
+            else:
+                ordered.append(["__IGNORE__" + word])
+    # returns cmu_list Ex. cmu_list [['g r ey1 t'], ['w ey1']]
     return ordered
+
 
 
 def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
@@ -106,10 +119,11 @@ def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
                "ow": "oʊ", "oy": "ɔɪ", "sh": "ʃ", "th": "θ", "uh": "ʊ", "uw": "u", "y": "j", "zh": "ʒ"}
 
     ipa_list = []  # the final list of IPA tokens to be returned
+    #Ex. cmu_list [['g r ey1 t'], ['w ey1']]
     for word_list in cmu_list:
         ipa_word_list = []  # the word list for each word
         for word in word_list:
-            if stress_marking:
+            if stress_marking and word != '':
                 word = stress.find_stress(word, type=stress_marking)
             else:
                 if re.sub("\d*", "", word.replace("__IGNORE__", "")) == "":
@@ -146,8 +160,14 @@ def cmu_to_ipa(cmu_list, mark=True, stress_marking='all'):
                     ipa_form = ipa_form.replace(sym[0], sym[1])
             ipa_word_list.append(ipa_form)
         ipa_list.append(sorted(list(set(ipa_word_list))))
-    #print("function cmu_to_ipa: ", ipa_list)
     return ipa_list
+
+
+def get_cmu_online(ipa_word, mark=True, stress_marking='all'):
+    """converts the CMU word lists into IPA transcriptions"""
+    # translate() return
+    result = CMULexiconTool(ipa_word.lower()).cmu_list
+    return result
 
 
 def get_top(ipa_list):
